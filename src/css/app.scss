@@ -3,6 +3,7 @@
 .custom-scroll-bar {
   &::-webkit-scrollbar {
     width: 3px;
+    height: 3px;
     cursor: pointer;
   }
   &::-webkit-scrollbar-track {

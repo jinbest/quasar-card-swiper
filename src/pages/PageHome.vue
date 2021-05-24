@@ -1,6 +1,5 @@
 <template>
   <q-page class="flex">
-
     <div class="home-header">
       <div>
         <q-avatar>
@@ -8,61 +7,184 @@
         </q-avatar>
         <p>@username</p>
       </div>
-      <div @click="open('bottom')">
+      <div @click="openFooterMenu('bottom')">
         <img src="../assets/img/three-dots.png" />
       </div>
     </div>
 
-    <div v-for="item in cardsData">
-      <Card :data="item" />
+    <card-swipe v-if="!showCardDialog && !showCreateCard">
+      <card-swipe-item>
+        <div @click="openCardDetails(cardDetailsIndex)">
+          <card-summary :data="cardsData[cardDetailsIndex]" :theme="makeTheme(cardsData[cardDetailsIndex].themeIndex)" />
+        </div>
+      </card-swipe-item>
+      <card-swipe-item v-for="(item, index) in cardsData" v-if="cardDetailsIndex !== index" :key="index">
+        <div @click="openCardDetails(index)">
+          <card-summary :data="item" :theme="makeTheme(item.themeIndex)" />
+        </div>
+      </card-swipe-item>
+    </card-swipe>
+
+    <q-dialog v-model="cardsData.length && showCardDialog">
+      <card-details
+        :data="showCardData"
+        :closeCardDetails="closeCardDetails"
+        :openFooterMenu="openFooterMenu"
+        :theme="makeTheme(showCardData.themeIndex)"
+      />
+    </q-dialog>
+
+    <q-dialog v-model="showCreateCard">
+      <card-create
+        :closeCreateCard="closeCreateCard"
+        :theme="makeTheme(this.themeIndex)"
+        :themeIndex="themeIndex"
+        :CreateNewCard="CreateNewCard"
+      />
+    </q-dialog>
+
+    <div v-if="showCardDialog || showCreateCard" class="select-card-theme">
+      <p>Select shout theme</p>
+      <div>
+        <div class="theme-lists custom-scroll-bar">
+          <div
+            v-for="(item, index) in cardThemes"
+            :key="index"
+            :style="`${makeTheme(index)}${selectedTheme(index)}`"
+            @click="setCardTheme(index, false)"
+          ></div>
+        </div>
+        <q-btn v-if="showCardDialog" label="Shout" @click="shoutTheme(showCardDialog ? false : true)" />
+      </div>
     </div>
 
     <q-dialog v-model="dialog" :position="position">
       <q-card>
-        <q-card-section class="row items-center no-wrap">
+        <q-card-section
+          @click="closeFooterMenu"
+          class="row items-center no-wrap"
+        >
           <p>Shout Options</p>
         </q-card-section>
-        <q-card-section class="row items-center no-wrap">
+        <q-card-section
+          @click="closeFooterMenu"
+          class="row items-center no-wrap"
+        >
           <p class="col-blue">Not Interested in this</p>
         </q-card-section>
-        <q-card-section class="row items-center no-wrap">
+        <q-card-section
+          @click="closeFooterMenu"
+          class="row items-center no-wrap"
+        >
           <p class="col-blue">Report Shout</p>
         </q-card-section>
-        <q-card-section class="row items-center no-wrap">
+        <q-card-section
+          @click="closeFooterMenu"
+          class="row items-center no-wrap"
+        >
           <p class="col-blue">Block User</p>
         </q-card-section>
-        <q-card-section class="row items-center no-wrap">
+        <q-card-section
+          @click="closeFooterMenu"
+          class="row items-center no-wrap"
+        >
           <p class="col-blue">Report User</p>
         </q-card-section>
-        <q-card-section class="row items-center no-wrap">
+        <q-card-section
+          @click="closeFooterMenu"
+          class="row items-center no-wrap"
+        >
           <p>Cancel</p>
         </q-card-section>
       </q-card>
     </q-dialog>
-
   </q-page>
 </template>
 
 <script>
-import { cardsData } from "../assets/data"
+import { cardsData, cardThemes } from "../assets/data";
+import { CardSwipe, CardSwipeItem } from "@eshengsky/vue-card-swipe";
+import Card from "../components/card/Card";
+import CardDetails from "../components/card/CardDetails";
+import CardCreate from "../components/card/CardCreate";
+import _ from "lodash";
 
 export default {
   name: "PageHome",
+  props: ["showCreateCard", "closeCreateCard"],
   data() {
     return {
       dialog: false,
       position: "bottom",
-      cardsData: cardsData,
+      cardsData: _.cloneDeep(cardsData),
+      cardDetailsIndex: 0,
+      showCardDialog: false,
+      showCardData: cardsData.length ? _.cloneDeep(cardsData[0]) : {},
+      cardThemes: _.cloneDeep(cardThemes),
+      themeIndex: 0,
     };
   },
   methods: {
-    open(position) {
+    openFooterMenu(position) {
       this.position = position;
       this.dialog = true;
+    },
+    closeFooterMenu() {
+      this.dialog = false;
+    },
+    openCardDetails(index) {
+      this.cardDetailsIndex = index;
+      this.themeIndex = this.cardsData.length ? this.cardsData[index].themeIndex : 0;
+      this.showCardData = this.cardsData.length ? _.cloneDeep(this.cardsData[index]) : {};
+      this.showCardDialog = true;
+    },
+    closeCardDetails() {
+      this.themeIndex = 0;
+      this.showCardDialog = false;
+    },
+    setCardTheme(index, createMode) {
+      this.themeIndex = index;
+      if (!createMode) {
+        this.showCardData.themeIndex = index;
+      }
+    },
+    selectedTheme(index) {
+      if (this.themeIndex === index) {
+        return "border: 2px solid white;";
+      } else {
+        return "border: none;";
+      }
+    },
+    makeTheme(index) {
+      const colLen = cardThemes[index].colors.length;
+      let linearParam = cardThemes[index].deg + ", ";
+      for (let i = 0; i < colLen - 1; i++) {
+        linearParam += `${cardThemes[index].colors[i].hex} ${cardThemes[index].colors[i].percent}, `;
+      }
+      linearParam += `${cardThemes[index].colors[colLen - 1].hex} ${
+        cardThemes[index].colors[colLen - 1].percent
+      }`;
+      return `background: linear-gradient(${linearParam});`;
+    },
+    shoutTheme(createMode) {
+      if (!createMode) {
+        this.cardsData[this.cardDetailsIndex] = _.cloneDeep(this.showCardData);
+        this.closeCardDetails();
+      } else {
+        return;
+      }
+    },
+    CreateNewCard(card) {
+      this.cardsData.push(card);
+      this.cardDetailsIndex = this.cardsData.length - 1;
     }
   },
   components: {
-    "Card": require("components/Card.vue").default
+    "card-summary": Card,
+    "card-swipe": CardSwipe,
+    "card-swipe-item": CardSwipeItem,
+    "card-details": CardDetails,
+    "card-create": CardCreate
   }
 };
 </script>
@@ -72,61 +194,6 @@ export default {
   width: 100%;
   padding: 20px;
   display: block;
-}
-.card-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 12px 8px 8px;
-  background: #ffffff;
-  border: 0.5px solid rgba(0, 0, 0, 0.17);
-  box-sizing: border-box;
-  border-radius: 100px !important;
-  height: 40px;
-  margin: 10px 20px;
-  .q-avatar {
-    height: 30px;
-    width: 30px;
-  }
-  .header-title {
-    color: #0c0c0c;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: normal;
-    font-family: "soleil";
-    text-align: center;
-    margin: auto;
-  }
-}
-.card-footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 56px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 0.5px solid rgba(255, 255, 255, 0.17);
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-content: center;
-  & > div {
-    display: flex;
-  }
-  .item {
-    display: flex;
-    align-content: center;
-    box-sizing: border-box;
-    margin: auto 0 auto 10px;
-    img {
-      width: 24px;
-      height: 24px;
-    }
-    p {
-      margin: auto 5px;
-      padding: 0;
-    }
-  }
 }
 .home-header {
   display: flex;
@@ -165,14 +232,58 @@ export default {
       height: 50px;
       margin: 0;
       padding: 0;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       & > p {
         margin: 0 auto;
       }
       .col-blue {
-        color: #0A84FF;
+        color: #0a84ff;
       }
     }
+  }
+}
+.card-swipe__indicators {
+  display: none;
+}
+.select-card-theme {
+  height: 80px !important;
+  position: fixed;
+  max-width: 600px;
+  margin-left: -20px;
+  bottom: 0;
+  z-index: 7000;
+  color: white;
+  background: #1c1c1e;
+  width: 100%;
+  padding: 0 10px;
+  p {
+    margin: 5px 0;
+    padding: 0;
+  }
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .theme-lists {
+    overflow-y: hidden;
+    overflow-x: scroll;
+    display: flex;
+    width: calc(100% - 110px);
+    & > div {
+      width: 35px;
+      height: 35px;
+      border-radius: 7px;
+      cursor: pointer;
+      margin-right: 5px;
+      flex-shrink: 0;
+    }
+  }
+  .q-btn {
+    background: #8e8e93;
+    padding: 0 10px;
+    border-radius: 100px;
+    width: 100px;
   }
 }
 </style>
