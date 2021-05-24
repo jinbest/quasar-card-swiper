@@ -27,19 +27,19 @@
 
     <q-dialog v-model="cardsData.length && showCardDialog">
       <card-details
+        @close="closeCardDetails"
         :data="showCardData"
-        :closeCardDetails="closeCardDetails"
-        :openFooterMenu="openFooterMenu"
         :theme="makeTheme(showCardData.themeIndex)"
       />
     </q-dialog>
 
     <q-dialog v-model="showCreateCard">
       <card-create
-        :closeCreateCard="closeCreateCard"
+        @close="closeCreateCard"
+        @create="CreateNewCard"
         :theme="makeTheme(this.themeIndex)"
         :themeIndex="themeIndex"
-        :CreateNewCard="CreateNewCard"
+        :cardsData="cardsData"
       />
     </q-dialog>
 
@@ -102,7 +102,6 @@
 </template>
 
 <script>
-import { cardsData, cardThemes } from "../assets/data";
 import { CardSwipe, CardSwipeItem } from "@eshengsky/vue-card-swipe";
 import Card from "../components/card/Card";
 import CardDetails from "../components/card/CardDetails";
@@ -111,16 +110,14 @@ import _ from "lodash";
 
 export default {
   name: "PageHome",
-  props: ["showCreateCard", "closeCreateCard"],
+  props: ["showCreateCard", "closeCreateCard", "cardsData", "cardThemes"],
   data() {
     return {
       dialog: false,
       position: "bottom",
-      cardsData: _.cloneDeep(cardsData),
       cardDetailsIndex: 0,
       showCardDialog: false,
-      showCardData: cardsData.length ? _.cloneDeep(cardsData[0]) : {},
-      cardThemes: _.cloneDeep(cardThemes),
+      showCardData: this.cardsData.length ? _.cloneDeep(this.cardsData[0]) : {},
       themeIndex: 0,
     };
   },
@@ -156,13 +153,13 @@ export default {
       }
     },
     makeTheme(index) {
-      const colLen = cardThemes[index].colors.length;
-      let linearParam = cardThemes[index].deg + ", ";
+      const colLen = this.cardThemes[index].colors.length;
+      let linearParam = this.cardThemes[index].deg + ", ";
       for (let i = 0; i < colLen - 1; i++) {
-        linearParam += `${cardThemes[index].colors[i].hex} ${cardThemes[index].colors[i].percent}, `;
+        linearParam += `${this.cardThemes[index].colors[i].hex} ${this.cardThemes[index].colors[i].percent}, `;
       }
-      linearParam += `${cardThemes[index].colors[colLen - 1].hex} ${
-        cardThemes[index].colors[colLen - 1].percent
+      linearParam += `${this.cardThemes[index].colors[colLen - 1].hex} ${
+        this.cardThemes[index].colors[colLen - 1].percent
       }`;
       return `background: linear-gradient(${linearParam});`;
     },
@@ -174,9 +171,9 @@ export default {
         return;
       }
     },
-    CreateNewCard(card) {
-      this.cardsData.push(card);
+    CreateNewCard() {
       this.cardDetailsIndex = this.cardsData.length - 1;
+      this.closeCreateCard()
     }
   },
   components: {
