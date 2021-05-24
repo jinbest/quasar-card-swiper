@@ -11,7 +11,7 @@
         <!-- <div @click="openFooterMenu('bottom')" style="margin-right: 10px">
           <img src="../../assets/img/three-dots.png" />
         </div> -->
-        <div @click="closeCardDetails">
+        <div @click="$emit('close')">
           <img src="../../assets/img/close.png" />
         </div>
       </div>
@@ -52,7 +52,7 @@
 <script>
 export default {
   name: "CardDetails",
-  props: ["data", "closeCardDetails", "openFooterMenu", "theme"]
+  props: ["data", "theme"]
 };
 </script>
 

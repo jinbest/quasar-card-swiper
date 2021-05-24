@@ -6,7 +6,7 @@
         <div style="margin-right: 10px;" @click="CreateCard">
           Done
         </div>
-        <div @click="closeCreateCard">
+        <div @click="$emit('close')">
           <img src="../../assets/img/close.png" />
         </div>
       </div>
@@ -23,7 +23,7 @@
 <script>
 export default {
   name: "CardCreate",
-  props: ["closeCreateCard", "theme", "themeIndex", "CreateNewCard"],
+  props: ["theme", "themeIndex", "cardsData"],
   data() {
     return {
       text: "",
@@ -57,8 +57,9 @@ export default {
         },
         themeIndex: this.themeIndex
       };
-      this.CreateNewCard(newCard);
-      this.closeCreateCard();
+      this.cardsData.push(newCard);
+      this.$store.dispatch('main/setCardsDataAction', this.cardsData)
+      this.$emit('create');
     }
   }
 };
