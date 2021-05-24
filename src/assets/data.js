@@ -35,7 +35,7 @@ const cardsData = [
     control: {
       avatar: "https://cdn.quasar.dev/img/avatar.png",
       title: {
-        discover: "Control - Discover a world unknown",
+        discover: "Popular - Discover a world unknown",
         shout: "What do you want to shout about?"
       }
     },
@@ -125,7 +125,70 @@ const cardThemes = [
   }
 ]
 
+const shoutUpText = (total) => {
+  return `You now have ${total} invites to shoutup! Invite your friends!`
+}
+
+const mockNotifyData = [
+  {
+    date: "2021-5-25",
+    followed: [
+      {
+        user: "@username",
+        userAvatar: "https://cdn.quasar.dev/img/avatar.png",
+        text: "followed you. Would you like to follow them back?"
+      }
+    ],
+    shoutup: {
+      total: 3,
+      text: shoutUpText(3),
+      inviteLink: "#"
+    },
+    liked: [
+      {
+        user: "@username",
+        userAvatar: "https://cdn.quasar.dev/img/avatar.png",
+        text: "liked your shout about",
+        about: "Minecraft official site | Minecraft"
+      }
+    ],
+    commented: [
+      {
+        user: "@username",
+        userAvatar: "https://cdn.quasar.dev/img/avatar.png",
+        text: "commented on your shout about",
+        about: "Minecraft official site | Minecraft"
+      }
+    ]
+  },
+  {
+    date: "2021-5-22",
+    followed: [
+      {
+        user: "@jack",
+        userAvatar: "https://cdn.quasar.dev/img/avatar.png",
+        text: "followed you. Would you like to follow them back?"
+      }
+    ],
+    shoutup: {
+      total: 5,
+      text: shoutUpText(5),
+      inviteLink: "#"
+    },
+    liked: [
+      {
+        user: "@jack",
+        userAvatar: "https://cdn.quasar.dev/img/avatar.png",
+        text: "liked your shout about",
+        about: "Minecraft official site | Minecraft"
+      }
+    ],
+    commented: []
+  }
+]
+
 export {
   cardsData,
-  cardThemes
+  cardThemes,
+  mockNotifyData
 }

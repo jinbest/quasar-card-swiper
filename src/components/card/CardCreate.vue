@@ -12,7 +12,7 @@
       </div>
     </q-card-section>
     <q-card-section class="card-create-header">
-      <p class="header-title">What do you want to shout about?</p>
+      <input class="header-title" placeholder="What do you want to shout about?" v-model="title" />
     </q-card-section>
     <q-card-section class="text custom-scroll-bar">
       <textarea v-model="text" placeholder="Tap to start typing..." />
@@ -27,12 +27,13 @@ export default {
   data() {
     return {
       text: "",
+      title: "",
       dense: false
     };
   },
   methods: {
     CreateCard() {
-      if (!this.text) {
+      if (!this.text || !this.title) {
         alert("Can't create empty card!");
         return;
       }
@@ -40,7 +41,7 @@ export default {
         control: {
           avatar: "https://cdn.quasar.dev/img/avatar.png",
           title: {
-            discover: "Control - Discover a world unknown",
+            discover: this.title,
             shout: "What do you want to shout about?"
           }
         },
@@ -134,7 +135,8 @@ export default {
   border-radius: 100px !important;
   height: fit-content !important;
   margin: 10px auto !important;
-  width: fit-content !important;
+  width: 300px !important;
+  max-width: calc(100% - 50px);
   .q-avatar {
     height: 30px;
     width: 30px;
@@ -147,6 +149,10 @@ export default {
     font-family: "soleil";
     text-align: center;
     margin: auto;
+    outline: none;
+    border: none;
+    width: 100%;
+    max-width: 250px;
   }
 }
 .q-dialog__inner--minimized {

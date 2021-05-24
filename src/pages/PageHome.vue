@@ -110,7 +110,7 @@ import _ from "lodash";
 
 export default {
   name: "PageHome",
-  props: ["showCreateCard", "closeCreateCard", "cardsData", "cardThemes"],
+  props: ["showCreateCard", "cardsData", "cardThemes"],
   data() {
     return {
       dialog: false,
@@ -145,6 +145,9 @@ export default {
         this.showCardData.themeIndex = index;
       }
     },
+    closeCreateCard() {
+      this.$emit("closeCreateCard")
+    },
     selectedTheme(index) {
       if (this.themeIndex === index) {
         return "border: 2px solid white;";
@@ -166,6 +169,7 @@ export default {
     shoutTheme(createMode) {
       if (!createMode) {
         this.cardsData[this.cardDetailsIndex] = _.cloneDeep(this.showCardData);
+        this.$store.dispatch('main/setCardsDataAction', this.cardsData)
         this.closeCardDetails();
       } else {
         return;

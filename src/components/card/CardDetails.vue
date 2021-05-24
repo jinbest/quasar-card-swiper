@@ -68,6 +68,7 @@ export default {
   min-height: 300px !important;
   display: flex !important;
   flex-direction: column !important;
+  padding-top: 15px;
   .text {
     font-size: 18px !important;
     line-height: 26px !important;
@@ -83,6 +84,9 @@ export default {
       margin: 0;
       padding: 5px 10px;
     }
+  }
+  img {
+    max-width: 100%;
   }
 }
 .card-header-username {
