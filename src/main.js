@@ -32,7 +32,6 @@ const app = {
 }
 
 // init user plugins
-MagicPluginLoader('i18n', app)
 MagicPluginLoader('axios', app)
 
 /* eslint-disable no-new */

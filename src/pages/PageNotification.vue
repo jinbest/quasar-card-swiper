@@ -6,7 +6,7 @@
         <div v-for="(item, index) in notifiData" :key="index">
           <p>{{ diffDate(item.date) }}</p>
           <div class="notifi-panel">
-            <div v-for="(it, idx) in item.followed">
+            <div v-for="(it, idx) in item.followed" :key="idx">
               <div class="flex-content">
                 <q-avatar>
                   <img :src="it.userAvatar" />
@@ -30,7 +30,7 @@
                 <q-btn color="primary" label="Invite" no-caps />
               </div>
             </div>
-            <div v-for="(it, idx) in item.liked">
+            <div v-for="(it, idx) in item.liked" :key="idx">
               <div class="flex-content">
                 <q-avatar>
                   <img :src="it.userAvatar" />
@@ -40,7 +40,7 @@
                 </p>
               </div>
             </div>
-            <div v-for="(it, idx) in item.commented">
+            <div v-for="(it, idx) in item.commented" :key="idx">
               <div class="flex-content">
                 <q-avatar>
                   <img :src="it.userAvatar" />
