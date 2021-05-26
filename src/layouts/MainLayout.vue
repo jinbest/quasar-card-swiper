@@ -45,9 +45,11 @@ export default {
   },
   methods: {
     openCreateCard() {
+      this.$store.dispatch("main/setThemeSelector", true)
       this.showCreateCard = true;
     },
     closeCreateCard() {
+      this.$store.dispatch("main/setThemeSelector", false)
       this.showCreateCard = false;
     }
   },

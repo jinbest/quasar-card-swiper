@@ -1,29 +1,29 @@
 <template>
-  <q-page class="flex">
+  <div class="card-type-select">
     <div class="search-header">
       <div>
-        <q-icon name="search" />
+        <q-icon name="search" color="white" />
         <input
           v-model="text"
           placeholder="Search for an interest ..."
           @input="handleSearch($event)"
         />
       </div>
-      <q-btn label="Cancel" @click="handleCancel" />
+      <q-btn label="Cancel" @click="handleCancel" text-color="white" />
     </div>
 
     <div class="container custom-scroll-bar">
-      <p v-if="recentFilterData.length">Recent Searches:</p>
+      <p v-if="recentFilterData.length">Recent Selected:</p>
       <div v-if="recentFilterData.length" class="data-panel">
         <div
           v-for="(item, index) in recentFilterData.slice(0, 3)"
           :key="index"
-          @click="openCardDetails(index, recentFilterData)"
+          @click="selectCardType(index, recentFilterData)"
         >
           <q-avatar>
-            <img :src="item.control.avatar" />
+            <img :src="item.avatar" />
           </q-avatar>
-          <p class="header-title">{{ item.control.title.discover }}</p>
+          <p class="header-title">{{ item.text }}</p>
         </div>
       </div>
 
@@ -31,97 +31,71 @@
         <div
           v-for="(item, index) in filteredData"
           :key="index"
-          @click="openCardDetails(index, filteredData)"
+          @click="selectCardType(index, filteredData)"
         >
           <q-avatar>
-            <img :src="item.control.avatar" />
+            <img :src="item.avatar" />
           </q-avatar>
-          <p class="header-title">{{ item.control.title.discover }}</p>
+          <p class="header-title">{{ item.text }}</p>
         </div>
       </div>
     </div>
-
-    <q-dialog v-model="cardsData.length && showCardDialog">
-      <card-details
-        @close="closeCardDetails"
-        :data="showCardData"
-        :theme="makeTheme(showCardData.themeIndex)"
-        :dataIndex="cardDetailsIndex"
-      />
-    </q-dialog>
-  </q-page>
+  </div>
 </template>
 
 <script>
-import CardDetails from "../components/card/CardDetails";
-import _ from "lodash";
+import _ from "lodash"
 
 export default {
-  name: "PageSearch",
-  props: ["cardsData", "cardThemes"],
+  name: "CardTypeSelect",
+  props: ["title"],
   data() {
     return {
       text: "",
-      showCardDialog: false,
-      cardDetailsIndex: 0,
-      themeIndex: 0,
-      showCardData: this.cardsData.length ? _.cloneDeep(this.cardsData[0]) : {},
-      filteredData: this.cardsData,
-      recentFilterData: this.$store.state.main.recentSearchCards
+      dense: false,
+      filteredData: _.cloneDeep(this.$store.state.main.cardType),
+      recentFilterData: _.cloneDeep(this.$store.state.main.recentSelectType)
     };
   },
   methods: {
-    openCardDetails(index, data) {
-      this.cardDetailsIndex = index;
-      this.themeIndex = data.length ? data[index].themeIndex : 0;
-      this.showCardData = data.length ? _.cloneDeep(data[index]) : {};
-      this.showCardDialog = true;
-    },
-    closeCardDetails() {
-      this.recentFilterData.unshift(this.showCardData);
-      this.$store.dispatch("main/setRecentSearchData", this.recentFilterData);
-      this.themeIndex = 0;
-      this.showCardDialog = false;
-    },
-    makeTheme(index) {
-      const colLen = this.cardThemes[index].colors.length;
-      let linearParam = this.cardThemes[index].deg + ", ";
-      for (let i = 0; i < colLen - 1; i++) {
-        linearParam += `${this.cardThemes[index].colors[i].hex} ${this.cardThemes[index].colors[i].percent}, `;
-      }
-      linearParam += `${this.cardThemes[index].colors[colLen - 1].hex} ${
-        this.cardThemes[index].colors[colLen - 1].percent
-      }`;
-      return `background: linear-gradient(${linearParam});`;
-    },
     handleSearch(event) {
-      const filterData = _.filter(this.cardsData, o =>
-        o.control.title.discover
-          .toLowerCase()
-          .includes(event.target.value.toLowerCase())
+      const allCardType = _.cloneDeep(this.$store.state.main.cardType);
+      const filterData = _.filter(allCardType, o =>
+        o.text.toLowerCase().includes(event.target.value.toLowerCase())
       );
       this.filteredData = filterData;
     },
     handleCancel() {
-      this.text = "";
-      this.filteredData = this.cardsData;
+      this.$emit("close")
+    },
+    selectCardType(index, data) {
+      const recentSelectedType = _.cloneDeep(this.$store.state.main.recentSelectType);
+      recentSelectedType.unshift(data[index])
+      this.$store.dispatch("main/setRecentSelectType", recentSelectedType);
+      this.$emit("title", data[index].text)
+      this.$emit("close")
     }
-  },
-  components: {
-    "card-details": CardDetails
   }
 };
 </script>
+
 <style lang="scss">
-.q-page {
+.card-type-select {
+  max-width: 600px !important;
+  position: fixed;
   width: 100%;
-  padding: 20px;
-  display: block;
+  height: 100vh;
+  background: #1c1c1e;
+  backdrop-filter: blur(32px);
+  max-height: 100vh !important;
+  top: 0;
+  padding: 15px;
   .container {
     margin: 20px auto;
     height: calc(100vh - 160px);
     overflow-y: scroll;
     overflow-x: hidden;
+    color: white;
   }
   .search-header {
     display: flex;

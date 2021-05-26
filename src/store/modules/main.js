@@ -1,4 +1,4 @@
-import { cardsData, cardThemes, mockNotifyData } from "../../assets/data"
+import { cardsData, cardThemes, mockNotifyData, mockUserData, mockType } from "../../assets/data"
 import _ from "lodash"
 
 const store = {
@@ -7,7 +7,11 @@ const store = {
     cardsData: _.cloneDeep(cardsData),
     cardThemes: _.cloneDeep(cardThemes),
     notificationData: _.cloneDeep(mockNotifyData),
-    recentSearchCards: []
+    recentSearchCards: [],
+    userData: _.cloneDeep(mockUserData),
+    cardType: _.cloneDeep(mockType),
+    recentSelectType: [],
+    themeSelector: false
   },
   getters: {
     getCardsData(state) {
@@ -21,6 +25,15 @@ const store = {
     },
     getNotificationData(state) {
       return state.notificationData
+    },
+    getUserData(state) {
+      return state.userData
+    },
+    getCardType(state) {
+      return state.cardType
+    },
+    getRecentSelectType(state) {
+      return state.recentSelectType
     }
   },
   actions: {
@@ -32,7 +45,13 @@ const store = {
     },
     setNotificationData(context, payload) {
       context.commit("mutateNotificationDataAction", payload);
-    }
+    },
+    setRecentSelectType(context, payload) {
+      context.commit("mutateRecentSelectType", payload);
+    },
+    setThemeSelector(context, payload) {
+      context.commit("mutateThemeSelector", payload);
+    },
   },
   mutations: {
     mutateCardsDataAction(state, payload) {
@@ -43,7 +62,13 @@ const store = {
     },
     mutateNotificationDataAction(state, payload) {
       state.notificationData = payload
-    }
+    },
+    mutateRecentSelectType(state, payload) {
+      state.recentSelectType = payload;
+    },
+    mutateThemeSelector(state, payload) {
+      state.themeSelector = payload;
+    },
   }
 };
 
