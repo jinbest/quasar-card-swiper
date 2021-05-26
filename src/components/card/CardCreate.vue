@@ -1,6 +1,6 @@
 <template>
   <q-card class="q-card-create" :style="theme">
-    <q-card-section class="card-header-username">
+    <q-card-section class="card-header-username" style="margin-top: 10px">
       <div></div>
       <div>
         <div style="margin-right: 10px;" @click="CreateCard">
@@ -11,16 +11,30 @@
         </div>
       </div>
     </q-card-section>
-    <q-card-section class="card-create-header">
-      <input class="header-title" placeholder="What do you want to shout about?" v-model="title" />
-    </q-card-section>
+    <q-btn
+      rounded
+      color="white"
+      text-color="black"
+      no-caps
+      class="round-select-card-type-btn"
+      @click="openSelectTypeModal"
+    >
+      {{title || "What do you want to shout about?"}}
+    </q-btn>
     <q-card-section class="text custom-scroll-bar">
       <textarea v-model="text" placeholder="Tap to start typing..." />
     </q-card-section>
+
+    <q-dialog v-model="showSelectTypeModal" style="z-index: 8000">
+      <card-type-select :title="title" @close="closeSelectTypeModal" @title="setTitle" />
+    </q-dialog>
+
   </q-card>
 </template>
 
 <script>
+import CardTypeSelect from "./CardTypeSelect";
+
 export default {
   name: "CardCreate",
   props: ["theme", "themeIndex", "cardsData"],
@@ -28,7 +42,8 @@ export default {
     return {
       text: "",
       title: "",
-      dense: false
+      dense: false,
+      showSelectTypeModal: false
     };
   },
   methods: {
@@ -56,12 +71,28 @@ export default {
           heart: 0,
           msg: 0
         },
-        themeIndex: this.themeIndex
+        themeIndex: this.themeIndex,
+        discussion: []
       };
       this.cardsData.push(newCard);
-      this.$store.dispatch('main/setCardsDataAction', this.cardsData)
-      this.$emit('create');
-    }
+      this.$store.dispatch("main/setCardsDataAction", this.cardsData);
+      this.$emit("create");
+      this.$emit("formatThemeIndex");
+    },
+    openSelectTypeModal() {
+      this.$store.dispatch("main/setThemeSelector", false)
+      this.showSelectTypeModal = true;
+    },
+    closeSelectTypeModal() {
+      this.$store.dispatch("main/setThemeSelector", true)
+      this.showSelectTypeModal = false;
+    },
+    setTitle(t) {
+      this.title = t;
+    },
+  },
+  components: {
+    "card-type-select": CardTypeSelect
   }
 };
 </script>
@@ -113,6 +144,8 @@ export default {
     align-content: center;
     box-sizing: border-box;
     margin: auto 0 auto 0;
+    color: white;
+    font-size: 17px;
     .q-avatar {
       width: 32px;
       height: 32px;
@@ -123,40 +156,12 @@ export default {
     }
   }
 }
-.card-create-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 3px 20px !important;
-  background: #ffffff;
-  border: 0.5px solid rgba(0, 0, 0, 0.17);
-  box-sizing: border-box;
-  border-radius: 100px !important;
-  height: fit-content !important;
-  margin: 10px auto !important;
-  width: 300px !important;
+.round-select-card-type-btn {
   max-width: calc(100% - 50px);
-  .q-avatar {
-    height: 30px;
-    width: 30px;
-  }
-  .header-title {
-    color: #0c0c0c;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: normal;
-    font-family: "soleil";
-    text-align: center;
-    margin: auto;
-    outline: none;
-    border: none;
-    width: 100%;
-    max-width: 250px;
-  }
+  margin: auto;
 }
-.q-dialog__inner--minimized {
-  padding: 10px;
-  align-items: flex-start;
-}
+// .q-dialog__inner--minimized {
+//   padding: 10px;
+//   align-items: flex-start;
+// }
 </style>

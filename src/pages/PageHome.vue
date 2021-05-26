@@ -15,10 +15,17 @@
     <card-swipe v-if="!showCardDialog && !showCreateCard">
       <card-swipe-item>
         <div @click="openCardDetails(cardDetailsIndex)">
-          <card-summary :data="cardsData[cardDetailsIndex]" :theme="makeTheme(cardsData[cardDetailsIndex].themeIndex)" />
+          <card-summary
+            :data="cardsData[cardDetailsIndex]"
+            :theme="makeTheme(cardsData[cardDetailsIndex].themeIndex)"
+          />
         </div>
       </card-swipe-item>
-      <card-swipe-item v-for="(item, index) in cardsData" v-if="cardDetailsIndex !== index" :key="index">
+      <card-swipe-item
+        v-for="(item, index) in cardsData"
+        v-if="cardDetailsIndex !== index"
+        :key="index"
+      >
         <div @click="openCardDetails(index)">
           <card-summary :data="item" :theme="makeTheme(item.themeIndex)" />
         </div>
@@ -30,6 +37,7 @@
         @close="closeCardDetails"
         :data="showCardData"
         :theme="makeTheme(showCardData.themeIndex)"
+        :dataIndex="cardDetailsIndex"
       />
     </q-dialog>
 
@@ -37,13 +45,15 @@
       <card-create
         @close="closeCreateCard"
         @create="CreateNewCard"
+        @formatThemeIndex="formatThemeIndex"
         :theme="makeTheme(this.themeIndex)"
         :themeIndex="themeIndex"
         :cardsData="cardsData"
+        ref="form"
       />
     </q-dialog>
 
-    <div v-if="showCardDialog || showCreateCard" class="select-card-theme">
+    <div v-if="$store.state.main.themeSelector" class="select-card-theme">
       <p>Select shout theme</p>
       <div>
         <div class="theme-lists custom-scroll-bar">
@@ -51,15 +61,18 @@
             v-for="(item, index) in cardThemes"
             :key="index"
             :style="`${makeTheme(index)}${selectedTheme(index)}`"
-            @click="setCardTheme(index, false)"
+            @click="setCardTheme(index)"
           ></div>
         </div>
-        <q-btn v-if="showCardDialog" label="Shout" @click="shoutTheme(showCardDialog ? false : true)" />
+        <q-btn
+          label="Shout"
+          @click="shoutTheme()"
+        />
       </div>
     </div>
 
     <q-dialog v-model="dialog" :position="position">
-      <q-card>
+      <q-card class="bottom-menu">
         <q-card-section
           @click="closeFooterMenu"
           class="row items-center no-wrap"
@@ -118,7 +131,7 @@ export default {
       cardDetailsIndex: 0,
       showCardDialog: false,
       showCardData: this.cardsData.length ? _.cloneDeep(this.cardsData[0]) : {},
-      themeIndex: 0,
+      themeIndex: 0
     };
   },
   methods: {
@@ -131,22 +144,19 @@ export default {
     },
     openCardDetails(index) {
       this.cardDetailsIndex = index;
-      this.themeIndex = this.cardsData.length ? this.cardsData[index].themeIndex : 0;
-      this.showCardData = this.cardsData.length ? _.cloneDeep(this.cardsData[index]) : {};
+      this.showCardData = this.cardsData.length
+        ? _.cloneDeep(this.cardsData[index])
+        : {};
       this.showCardDialog = true;
     },
     closeCardDetails() {
-      this.themeIndex = 0;
       this.showCardDialog = false;
     },
-    setCardTheme(index, createMode) {
+    setCardTheme(index) {
       this.themeIndex = index;
-      if (!createMode) {
-        this.showCardData.themeIndex = index;
-      }
     },
     closeCreateCard() {
-      this.$emit("closeCreateCard")
+      this.$emit("closeCreateCard");
     },
     selectedTheme(index) {
       if (this.themeIndex === index) {
@@ -166,18 +176,15 @@ export default {
       }`;
       return `background: linear-gradient(${linearParam});`;
     },
-    shoutTheme(createMode) {
-      if (!createMode) {
-        this.cardsData[this.cardDetailsIndex] = _.cloneDeep(this.showCardData);
-        this.$store.dispatch('main/setCardsDataAction', this.cardsData)
-        this.closeCardDetails();
-      } else {
-        return;
-      }
+    shoutTheme() {
+      this.$refs.form.CreateCard();
     },
     CreateNewCard() {
       this.cardDetailsIndex = this.cardsData.length - 1;
-      this.closeCreateCard()
+      this.closeCreateCard();
+    },
+    formatThemeIndex() {
+      this.themeIndex = 0
     }
   },
   components: {
@@ -195,6 +202,33 @@ export default {
   width: 100%;
   padding: 20px;
   display: block;
+  .q-dialog {
+    .q-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0px;
+      background: rgba(30, 30, 30, 0.75);
+      border-radius: 14px 14px 0 0;
+      height: fit-content;
+      & > div {
+        color: white;
+        text-align: center;
+        font-size: 17px;
+        width: 100%;
+        height: 50px;
+        margin: 0;
+        padding: 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        & > p {
+          margin: 0 auto;
+        }
+        .col-blue {
+          color: #0a84ff;
+        }
+      }
+    }
+  }
 }
 .home-header {
   display: flex;
@@ -213,33 +247,6 @@ export default {
     p {
       margin: auto 5px;
       padding: 0;
-    }
-  }
-}
-.q-dialog {
-  .q-card {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    background: rgba(30, 30, 30, 0.75);
-    border-radius: 14px 14px 0 0;
-    height: fit-content;
-    & > div {
-      color: white;
-      text-align: center;
-      font-size: 17px;
-      width: 100%;
-      height: 50px;
-      margin: 0;
-      padding: 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      & > p {
-        margin: 0 auto;
-      }
-      .col-blue {
-        color: #0a84ff;
-      }
     }
   }
 }
@@ -285,6 +292,32 @@ export default {
     padding: 0 10px;
     border-radius: 100px;
     width: 100px;
+  }
+}
+.bottom-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  background: rgba(30, 30, 30, 0.75);
+  backdrop-filter: blur(81.5485px);
+  border-radius: 14px 14px 0 0 !important;
+  height: fit-content;
+  & > div {
+    color: white;
+    text-align: center;
+    font-size: 17px;
+    width: 100%;
+    height: 50px;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    & > p {
+      margin: 0 auto;
+    }
+    .col-blue {
+      color: #0a84ff;
+    }
   }
 }
 </style>

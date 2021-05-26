@@ -29,7 +29,66 @@ const cardsData = [
       heart: 32,
       msg: 179,
     },
-    themeIndex: 0
+    themeIndex: 0,
+    discussion: [
+      {
+        username: "@username",
+        avatar: "https://cdn.quasar.dev/img/avatar.png",
+        comment: "This is an example of a comment. Users can leave multiple comments on a shout.",
+        date: "2m",
+        likes: 32,
+        react: true,
+        reply: []
+      },
+      {
+        username: "@username",
+        avatar: "https://cdn.quasar.dev/img/avatar.png",
+        comment: "This is an example of a long comment. The comment will be truncated after 180 characters. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in diam sed nunc euismod lacinia. Fusce consectetur mauris nibh, vel euismod eros luctus e... ",
+        date: "3m",
+        likes: 52,
+        react: false,
+        reply: [
+          {
+            username: "@username",
+            avatar: "https://cdn.quasar.dev/img/avatar.png",
+            comment: "Your reply",
+            date: "8hr",
+            likes: 0,
+            react: true,
+            reply: []
+          }
+        ]
+      },
+      {
+        username: "@username",
+        avatar: "https://cdn.quasar.dev/img/avatar.png",
+        comment: "This is an example of nested comments.",
+        date: "16hr",
+        likes: 21,
+        react: false,
+        reply: [
+          {
+            username: "@username",
+            avatar: "https://cdn.quasar.dev/img/avatar.png",
+            comment: "Here is a reply to a comment.",
+            date: "16hr",
+            likes: 32,
+            react: false,
+            reply: [
+              {
+                username: "@username",
+                avatar: "https://cdn.quasar.dev/img/avatar.png",
+                comment: "Your reply to a reply.",
+                date: "16hr",
+                likes: 32,
+                react: false,
+                reply: []
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
     control: {
@@ -50,7 +109,66 @@ const cardsData = [
       heart: 16,
       msg: 120,
     },
-    themeIndex: 0
+    themeIndex: 0,
+    discussion: [
+      {
+        username: "@username",
+        avatar: "https://cdn.quasar.dev/img/avatar.png",
+        comment: "This is an example of a comment. Users can leave multiple comments on a shout.",
+        date: "2m",
+        likes: 32,
+        react: true,
+        reply: []
+      },
+      {
+        username: "@username",
+        avatar: "https://cdn.quasar.dev/img/avatar.png",
+        comment: "This is an example of a long comment. The comment will be truncated after 180 characters. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in diam sed nunc euismod lacinia. Fusce consectetur mauris nibh, vel euismod eros luctus e... ",
+        date: "3m",
+        likes: 52,
+        react: false,
+        reply: [
+          {
+            username: "@username",
+            avatar: "https://cdn.quasar.dev/img/avatar.png",
+            comment: "Your reply",
+            date: "8hr",
+            likes: 0,
+            react: true,
+            reply: []
+          }
+        ]
+      },
+      {
+        username: "@username",
+        avatar: "https://cdn.quasar.dev/img/avatar.png",
+        comment: "This is an example of nested comments.",
+        date: "16hr",
+        likes: 21,
+        react: false,
+        reply: [
+          {
+            username: "@username",
+            avatar: "https://cdn.quasar.dev/img/avatar.png",
+            comment: "Here is a reply to a comment.",
+            date: "16hr",
+            likes: 32,
+            react: false,
+            reply: [
+              {
+                username: "@username",
+                avatar: "https://cdn.quasar.dev/img/avatar.png",
+                comment: "Your reply to a reply.",
+                date: "16hr",
+                likes: 32,
+                react: false,
+                reply: []
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
     control: {
@@ -75,7 +193,66 @@ const cardsData = [
       heart: 22,
       msg: 150,
     },
-    themeIndex: 0
+    themeIndex: 0,
+    discussion: [
+      {
+        username: "@username",
+        avatar: "https://cdn.quasar.dev/img/avatar.png",
+        comment: "This is an example of a comment. Users can leave multiple comments on a shout.",
+        date: "2m",
+        likes: 32,
+        react: true,
+        reply: []
+      },
+      {
+        username: "@username",
+        avatar: "https://cdn.quasar.dev/img/avatar.png",
+        comment: "This is an example of a long comment. The comment will be truncated after 180 characters. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in diam sed nunc euismod lacinia. Fusce consectetur mauris nibh, vel euismod eros luctus e... ",
+        date: "3m",
+        likes: 52,
+        react: false,
+        reply: [
+          {
+            username: "@username",
+            avatar: "https://cdn.quasar.dev/img/avatar.png",
+            comment: "Your reply",
+            date: "8hr",
+            likes: 0,
+            react: true,
+            reply: []
+          }
+        ]
+      },
+      {
+        username: "@username",
+        avatar: "https://cdn.quasar.dev/img/avatar.png",
+        comment: "This is an example of nested comments.",
+        date: "16hr",
+        likes: 21,
+        react: false,
+        reply: [
+          {
+            username: "@username",
+            avatar: "https://cdn.quasar.dev/img/avatar.png",
+            comment: "Here is a reply to a comment.",
+            date: "16hr",
+            likes: 32,
+            react: false,
+            reply: [
+              {
+                username: "@username",
+                avatar: "https://cdn.quasar.dev/img/avatar.png",
+                comment: "Your reply to a reply.",
+                date: "16hr",
+                likes: 32,
+                react: false,
+                reply: []
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ];
 
@@ -187,8 +364,48 @@ const mockNotifyData = [
   }
 ]
 
+const mockUserData = {
+  username: "@username",
+  avatar: "https://cdn.quasar.dev/img/avatar.png",
+  data: [
+    {
+      name: "Shouts",
+      total: 146
+    },
+    {
+      name: "Interests",
+      total: 42
+    },
+    {
+      name: "Followers",
+      total: 3400
+    },
+    {
+      name: "Following",
+      total: 739
+    }
+  ]
+}
+
+const mockType = [
+  {
+    text: "Control - Discover a world unknown",
+    avatar: "https://cdn.quasar.dev/img/avatar.png",
+  },
+  {
+    text: "Appcloud Smartphones Gaming Ak16 Joystick Gamepad",
+    avatar: "https://cdn.quasar.dev/img/avatar.png",
+  },
+  {
+    text: "Popular - Discover a world unknown",
+    avatar: "https://cdn.quasar.dev/img/avatar.png",
+  }
+]
+
 export {
   cardsData,
   cardThemes,
-  mockNotifyData
+  mockNotifyData,
+  mockUserData,
+  mockType
 }
