@@ -58,7 +58,8 @@ export default {
           title: {
             discover: this.title,
             shout: "What do you want to shout about?"
-          }
+          },
+          commonInterest: false
         },
         text: this.text,
         details: [

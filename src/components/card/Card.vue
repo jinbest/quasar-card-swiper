@@ -44,7 +44,7 @@ export default {
   cursor: pointer;
   border-radius: 23px;
   position: relative;
-  margin: 20px auto 0;
+  margin: 15px auto 0;
   height: calc(100vh - 150px);
   min-height: 300px;
   display: flex;

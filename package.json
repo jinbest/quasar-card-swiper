@@ -17,7 +17,8 @@
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
     "lodash": "^4.17.21",
-    "quasar": "^1.0.0"
+    "quasar": "^1.0.0",
+    "vue2-touch-events": "^3.2.2"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",
