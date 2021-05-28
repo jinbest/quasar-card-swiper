@@ -2,10 +2,10 @@
   <q-page class="flex">
     <div class="user-header" v-touch:swipe.bottom="swipeBottomHandler">
       <div>
-        <q-avatar v-if="!viewProfile">
+        <q-avatar v-if="!viewProfile && !viewSetting && !viewInvite">
           <img src="https://cdn.quasar.dev/img/avatar.png" />
         </q-avatar>
-        <p v-if="!viewProfile">@username</p>
+        <p v-if="!viewProfile && !viewSetting && !viewInvite">@username</p>
       </div>
       <div class="setting">
         <div v-if="viewMain" @click="openInvitePage">
@@ -149,6 +149,13 @@
         />
       </q-dialog>
     </div>
+
+    <div v-if="!viewMain && viewSetting">
+      <setting-page />
+    </div>
+    <div v-if="!viewMain && viewInvite">
+      <invite-page />
+    </div>
   </q-page>
 </template>
 
@@ -159,6 +166,8 @@ import CardDetails from "../components/card/CardDetails";
 import _ from "lodash";
 import Vue from "vue";
 import Vue2TouchEvents from "vue2-touch-events";
+import Setting from "../components/profile/Setting";
+import Invite from "../components/profile/Invite";
 
 Vue.use(Vue2TouchEvents);
 
@@ -174,14 +183,18 @@ export default {
       showCardData: this.cardsData.length ? _.cloneDeep(this.cardsData[0]) : {},
       themeIndex: 0,
       viewProfile: true,
-      viewMain: true
+      viewMain: true,
+      viewSetting: false,
+      viewInvite: false
     };
   },
   components: {
     "card-summary": Card,
     "card-swipe": CardSwipe,
     "card-swipe-item": CardSwipeItem,
-    "card-details": CardDetails
+    "card-details": CardDetails,
+    "setting-page": Setting,
+    "invite-page": Invite
   },
   methods: {
     openCardDetails(index) {
@@ -217,14 +230,18 @@ export default {
       this.viewProfile = true;
     },
     openSetting() {
-      this.viewMain = false
+      this.viewSetting = true;
+      this.viewMain = false;
     },
     openInvitePage() {
-      this.viewMain = false
+      this.viewInvite = true;
+      this.viewMain = false;
     },
     close() {
-      this.viewMain = true
-      this.viewProfile = true
+      this.viewSetting = false;
+      this.viewInvite = false;
+      this.viewMain = true;
+      this.viewProfile = true;
     }
   }
 };
