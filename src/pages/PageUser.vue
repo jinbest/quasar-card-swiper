@@ -6,15 +6,23 @@
           <img src="https://cdn.quasar.dev/img/avatar.png" />
         </q-avatar>
         <p v-if="!viewProfile && !viewSetting && !viewInvite">@username</p>
+        <div
+          class="img-container"
+          style="margin-left: 0"
+          v-if="!viewMain && inviteEmail"
+          @click="backInvite"
+        >
+          <img src="../assets/img/back.png" />
+        </div>
       </div>
-      <div class="setting">
-        <div v-if="viewMain" @click="openInvitePage">
+      <div class="flex">
+        <div class="img-container" v-if="viewMain" @click="openInvitePage">
           <img src="../assets/img/mail.png" />
         </div>
-        <div v-if="viewMain" @click="openSetting">
+        <div class="img-container" v-if="viewMain" @click="openSetting">
           <img src="../assets/img/setting.png" />
         </div>
-        <div v-if="!viewMain" @click="close">
+        <div class="img-container" v-if="!viewMain" @click="close">
           <img src="../assets/img/cancel.png" />
         </div>
       </div>
@@ -154,7 +162,13 @@
       <setting-page />
     </div>
     <div v-if="!viewMain && viewInvite">
-      <invite-page />
+      <invite-page
+        :inviteEmail="inviteEmail"
+        :inviteSent="inviteSent"
+        @invite="onClickInvite"
+        @sentInvite="onInviteSent"
+        @backToProfile="close"
+      />
     </div>
   </q-page>
 </template>
@@ -185,7 +199,9 @@ export default {
       viewProfile: true,
       viewMain: true,
       viewSetting: false,
-      viewInvite: false
+      viewInvite: false,
+      inviteEmail: false,
+      inviteSent: false
     };
   },
   components: {
@@ -242,6 +258,18 @@ export default {
       this.viewInvite = false;
       this.viewMain = true;
       this.viewProfile = true;
+      this.backInvite();
+    },
+    onClickInvite() {
+      this.inviteEmail = true;
+    },
+    onInviteSent() {
+      this.inviteSent = true;
+      this.inviteEmail = false;
+    },
+    backInvite() {
+      this.inviteEmail = false;
+      this.inviteSent = false;
     }
   }
 };
@@ -276,20 +304,17 @@ export default {
         padding: 0;
       }
     }
-    .setting {
-      display: flex;
-      & > div {
-        border-radius: 100px;
-        border: 1px solid #3a3a3c;
-        width: 32px;
-        height: 32px;
-        margin-left: 15px;
-        text-align: center;
-        img {
-          margin-top: 7px;
-          width: 15px;
-          height: 15px;
-        }
+    .img-container {
+      border-radius: 100px;
+      border: 1px solid #3a3a3c;
+      width: 32px;
+      height: 32px;
+      margin-left: 15px;
+      text-align: center;
+      img {
+        margin-top: 7px;
+        width: 15px;
+        height: 15px;
       }
     }
   }

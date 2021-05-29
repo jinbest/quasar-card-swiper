@@ -3,9 +3,6 @@
     <q-card-section class="card-header-username" style="margin-top: 10px">
       <div></div>
       <div>
-        <div style="margin-right: 10px;" @click="CreateCard">
-          Done
-        </div>
         <div @click="$emit('close')">
           <img src="../../assets/img/close.png" />
         </div>
@@ -19,36 +16,54 @@
       class="round-select-card-type-btn"
       @click="openSelectTypeModal"
     >
-      {{title || "What do you want to shout about?"}}
+      {{ title || "What do you want to shout about?" }}
     </q-btn>
-    <q-card-section class="text custom-scroll-bar">
-      <textarea v-model="text" placeholder="Tap to start typing..." />
+
+    <q-card-section class="tap-typing">
+      <p v-if="tapBtn" @click="openCardInput">Tap to start typing ...</p>
+      <div v-if="!tapBtn" class="card-input-details">
+        <div v-for="(item, index) in details" :key="index">
+          <p class="input-text">{{ item.content }}</p>
+          <img class="input-img" :src="item.img" style="width: 100%;" />
+        </div>
+      </div>
     </q-card-section>
 
     <q-dialog v-model="showSelectTypeModal" style="z-index: 8000">
-      <card-type-select :title="title" @close="closeSelectTypeModal" @title="setTitle" />
+      <card-type-select
+        :title="title"
+        @close="closeSelectTypeModal"
+        @title="setTitle"
+      />
     </q-dialog>
 
+    <q-dialog v-model="showCardInput" style="z-index: 8000">
+      <card-input @close="closeCardInput" @saveInputValue="handleInputValue" />
+    </q-dialog>
   </q-card>
 </template>
 
 <script>
 import CardTypeSelect from "./CardTypeSelect";
+import CardInput from "./CardInput";
+import _ from "lodash";
 
 export default {
   name: "CardCreate",
   props: ["theme", "themeIndex", "cardsData"],
   data() {
     return {
-      text: "",
+      details: [],
       title: "",
       dense: false,
-      showSelectTypeModal: false
+      showSelectTypeModal: false,
+      showCardInput: false,
+      tapBtn: true
     };
   },
   methods: {
     CreateCard() {
-      if (!this.text || !this.title) {
+      if (!this.details.length || !this.title) {
         alert("Can't create empty card!");
         return;
       }
@@ -61,13 +76,8 @@ export default {
           },
           commonInterest: false
         },
-        text: this.text,
-        details: [
-          {
-            content: this.text,
-            img: ""
-          }
-        ],
+        text: this.details[0].content,
+        details: this.details,
         other: {
           heart: 0,
           msg: 0
@@ -81,19 +91,32 @@ export default {
       this.$emit("formatThemeIndex");
     },
     openSelectTypeModal() {
-      this.$store.dispatch("main/setThemeSelector", false)
+      this.$store.dispatch("main/setThemeSelector", false);
       this.showSelectTypeModal = true;
     },
     closeSelectTypeModal() {
-      this.$store.dispatch("main/setThemeSelector", true)
+      this.$store.dispatch("main/setThemeSelector", true);
       this.showSelectTypeModal = false;
     },
     setTitle(t) {
       this.title = t;
     },
+    openCardInput() {
+      this.$store.dispatch("main/setThemeSelector", false);
+      this.showCardInput = true;
+    },
+    closeCardInput() {
+      this.$store.dispatch("main/setThemeSelector", true);
+      this.showCardInput = false;
+    },
+    handleInputValue(data) {
+      this.details = _.cloneDeep(data);
+      this.tapBtn = false;
+    }
   },
   components: {
-    "card-type-select": CardTypeSelect
+    "card-type-select": CardTypeSelect,
+    "card-input": CardInput
   }
 };
 </script>
@@ -110,7 +133,7 @@ export default {
   min-height: 300px !important;
   display: flex !important;
   flex-direction: column !important;
-  .text {
+  .tap-typing {
     font-size: 18px !important;
     line-height: 26px !important;
     text-align: center !important;
@@ -121,16 +144,11 @@ export default {
     overflow-x: hidden !important;
     margin-bottom: 20px !important;
     border: none !important;
-    textarea {
-      margin: 0;
-      padding: 5px 10px;
-      width: 100%;
-      height: 100%;
-      border: none;
-      outline: none;
-      background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    p {
       color: white;
-      text-align: center;
     }
   }
 }
@@ -161,8 +179,19 @@ export default {
   max-width: calc(100% - 50px);
   margin: auto;
 }
-// .q-dialog__inner--minimized {
-//   padding: 10px;
-//   align-items: flex-start;
-// }
+.card-input-details {
+  & > div {
+    margin-bottom: 20px !important;
+    .input-text {
+      font-size: 18px !important;
+      line-height: 26px !important;
+      font-family: "soleil";
+      font-weight: 400 !important;
+      color: white !important;
+    }
+    .input-img {
+      width: 100% !important;
+    }
+  }
+}
 </style>

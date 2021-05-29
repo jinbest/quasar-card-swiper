@@ -66,7 +66,7 @@
         </div>
         <q-btn
           label="Shout"
-          @click="shoutTheme()"
+          @click="shoutTheme"
         />
       </div>
     </div>

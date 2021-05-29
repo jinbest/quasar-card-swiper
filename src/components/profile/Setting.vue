@@ -7,6 +7,7 @@
       </div>
       <div>
         <p class="text">Enable Push Notification</p>
+        <custom-switcher style="margin-right: 15px"></custom-switcher>
       </div>
       <div>
         <p class="text">Blocked Accounts</p>
@@ -33,8 +34,12 @@
 </template>
 
 <script>
+import CustomSwitcher from "../CustomSwitcher"
 export default {
-  name: "Setting"
+  name: "Setting",
+  components: {
+    "custom-switcher": CustomSwitcher
+  }
 };
 </script>
 
@@ -60,6 +65,7 @@ export default {
     border-top: 1px solid #3a3a3c;
     border-bottom: 1px solid #3a3a3c;
     margin-top: -1px;
+    justify-content: space-between;
   }
   .q-avatar {
     height: 30px;
