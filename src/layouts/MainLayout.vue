@@ -92,9 +92,9 @@ export default {
   }
   .q-tab__content {
     background: radial-gradient(103.46% 165.24% at 100% -15.38%, #0FB8FF 0%, #DF47FD 48.64%, #FFED2B 100%);
-    width: 50px;
-    height: 50px;
-    top: 5px;
+    width: 40px;
+    height: 40px;
+    top: 10px;
     border-radius: 100px;
     i {
       color: white;
