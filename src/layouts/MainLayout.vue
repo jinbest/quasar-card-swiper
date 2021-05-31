@@ -73,7 +73,7 @@ export default {
   padding-bottom: 0 !important;
 }
 .footer-tab {
-  background: rgba(28, 28, 30, 0.83);
+  background: #1c1c1e;
   height: 60px;
 }
 .q-footer--bordered {
