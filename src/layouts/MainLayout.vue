@@ -19,7 +19,7 @@
       >
         <q-route-tab name="home" to="/" exact icon="home" />
         <q-route-tab name="search" icon="search" to="/search" />
-        <q-route-tab name="create" icon="add" to="/" @click="openCreateCard" />
+        <q-route-tab name="create" icon="add" to="/" @click="openCreateCard" class="create-icon" />
         <q-route-tab name="notification" to="/notification">
           <q-icon v-if="tab === 'notification'">
             <img src="../assets/img/active-noti.png" />
@@ -84,6 +84,21 @@ export default {
   margin: auto;
   .q-tab {
     max-width: 100px;
+  }
+}
+.create-icon {
+  .q-tab__indicator {
+    display: none;
+  }
+  .q-tab__content {
+    background: radial-gradient(103.46% 165.24% at 100% -15.38%, #0FB8FF 0%, #DF47FD 48.64%, #FFED2B 100%);
+    width: 50px;
+    height: 50px;
+    top: 5px;
+    border-radius: 100px;
+    i {
+      color: white;
+    }
   }
 }
 </style>
