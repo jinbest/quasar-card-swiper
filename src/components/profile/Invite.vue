@@ -186,5 +186,9 @@ export default {
 .back-to-profile {
   text-align: center;
   padding: 50px 0 0;
+  color: #8E8E93;
+  .q-btn {
+    border: 1px solid #8E8E93;
+  }
 }
 </style>
