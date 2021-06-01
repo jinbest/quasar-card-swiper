@@ -86,6 +86,7 @@ export default {
   width: 100%;
   height: 100vh;
   background: #1c1c1e;
+  -webkit-backdrop-filter: blur(32px);
   backdrop-filter: blur(32px);
   max-height: 100vh !important;
   top: 0;

@@ -16,8 +16,16 @@
         </div>
       </div>
       <div class="flex">
-        <div class="img-container" v-if="viewMain" @click="openInvitePage">
+        <div
+          class="img-container"
+          style="position: relative"
+          v-if="viewMain"
+          @click="openInvitePage"
+        >
           <img src="../assets/img/mail.png" />
+          <q-badge color="primary" rounded floating text-color="black"
+            >3</q-badge
+          >
         </div>
         <div class="img-container" v-if="viewMain" @click="openSetting">
           <img src="../assets/img/setting.png" />
@@ -58,8 +66,8 @@
         v-touch:swipe.top="swipeTopHandler"
         v-touch:swipe.bottom="swipeBottomHandler"
       >
-        <q-tab name="shouts" label="Shouts" />
-        <q-tab name="interests" label="Interests" />
+        <q-tab name="shouts" label="Shouts" no-caps />
+        <q-tab name="interests" label="Interests" no-caps />
       </q-tabs>
 
       <q-tab-panels
@@ -78,6 +86,7 @@
                 <img src="https://cdn.quasar.dev/img/avatar.png" />
               </q-avatar>
               <p>@username</p>
+              <p style="color:#8E8E93">2m</p>
             </div>
             <div>
               <img src="../assets/img/three-dots.png" />
@@ -126,11 +135,15 @@
               v-for="(item, index) in cardsData"
               v-if="item.control.commonInterest"
               @click="openCardDetails(index)"
+              :style="borderStyle(index)"
             >
               <q-avatar>
                 <img :src="item.control.avatar" />
               </q-avatar>
-              <p class="header-title">{{ item.control.title.discover }}</p>
+              <div>
+                <p class="header-title">{{ item.control.title.discover }}</p>
+                <p class="type">{{ item.control.type }}</p>
+              </div>
             </div>
           </div>
           <p>All Interests</p>
@@ -138,11 +151,15 @@
             <div
               v-for="(item, index) in cardsData"
               @click="openCardDetails(index)"
+              :style="borderStyle(index)"
             >
               <q-avatar>
                 <img :src="item.control.avatar" />
               </q-avatar>
-              <p class="header-title">{{ item.control.title.discover }}</p>
+              <div>
+                <p class="header-title">{{ item.control.title.discover }}</p>
+                <p class="type">{{ item.control.type }}</p>
+              </div>
             </div>
           </div>
         </q-tab-panel>
@@ -270,6 +287,13 @@ export default {
     backInvite() {
       this.inviteEmail = false;
       this.inviteSent = false;
+    },
+    borderStyle(index) {
+      if (index === 0) {
+        return "border-top: none";
+      } else {
+        return "";
+      }
     }
   }
 };
@@ -283,6 +307,13 @@ export default {
   overflow: hidden;
   .q-tab {
     border-radius: 30px;
+    .q-tab__label {
+      font-family: "soleil";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px !important;
+      line-height: 20px;
+    }
   }
   .user-header {
     height: 40px;
@@ -315,6 +346,17 @@ export default {
         margin-top: 7px;
         width: 15px;
         height: 15px;
+      }
+      .q-badge {
+        padding: 2px 4px;
+        font-size: 12px;
+      }
+      .q-badge--floating {
+        position: absolute;
+        bottom: -4px;
+        top: inherit;
+        right: -3px;
+        cursor: inherit;
       }
     }
   }
@@ -385,6 +427,7 @@ export default {
 .custom-q-panel {
   .q-tab-panel {
     height: calc(100vh - 160px);
+    padding: 16px 0;
   }
   .interests-card {
     background: #292929;
@@ -394,10 +437,8 @@ export default {
     margin-bottom: 20px;
     & > div {
       display: flex;
-      align-items: center;
       padding: 15px 0;
       border-top: 1px solid #3a3a3c;
-      border-bottom: 1px solid #3a3a3c;
       margin-top: -1px;
     }
     .q-avatar {
@@ -413,6 +454,12 @@ export default {
       text-align: left;
       margin: auto 0 auto 15px;
       padding: 0;
+    }
+    .type {
+      color: #8E8E93;
+      font-size: 14px;
+      padding: 0;
+      margin: 10px 0 0 15px;
     }
   }
 }

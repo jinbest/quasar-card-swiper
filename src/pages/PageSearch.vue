@@ -9,7 +9,8 @@
           @input="handleSearch($event)"
         />
       </div>
-      <q-btn label="Cancel" @click="handleCancel" />
+      <!-- <q-btn label="Cancel" @click="handleCancel" /> -->
+      <p class="cancel-btn" @click="handleCancel">Cancel</p>
     </div>
 
     <div class="container custom-scroll-bar">
@@ -19,6 +20,7 @@
           v-for="(item, index) in recentFilterData.slice(0, 3)"
           :key="index"
           @click="openCardDetails(index, recentFilterData)"
+          :style="borderStyle(index)"
         >
           <q-avatar>
             <img :src="item.control.avatar" />
@@ -32,6 +34,7 @@
           v-for="(item, index) in filteredData"
           :key="index"
           @click="openCardDetails(index, filteredData)"
+          :style="borderStyle(index)"
         >
           <q-avatar>
             <img :src="item.control.avatar" />
@@ -105,6 +108,13 @@ export default {
     handleCancel() {
       this.text = "";
       this.filteredData = this.cardsData;
+    },
+    borderStyle(index) {
+      if (index === 0) {
+        return "border-top: none";
+      } else {
+        return "";
+      }
     }
   },
   components: {
@@ -129,6 +139,7 @@ export default {
     justify-content: space-between;
     width: 100%;
     height: 40px;
+    align-items: center;
     input {
       border: none;
       background: transparent;
@@ -143,11 +154,26 @@ export default {
       padding: 5px 10px;
       border-radius: 100px;
       border: 1px solid rgb(100, 100, 100);
-      width: calc(100% - 100px);
+      width: calc(100% - 80px);
       .q-icon {
         width: 32px;
         height: 32px;
       }
+    }
+    .cancel-btn {
+      width: 60px;
+      height: 20px;
+      font-family: "soleil";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20px;
+      display: flex;
+      align-items: center;
+      text-align: right;
+      color: #FFFFFF;
+      padding: 0;
+      margin: 0;
     }
   }
   .data-panel {
@@ -161,7 +187,6 @@ export default {
       align-items: center;
       padding: 15px 0;
       border-top: 1px solid #3a3a3c;
-      border-bottom: 1px solid #3a3a3c;
       margin-top: -1px;
     }
     .q-avatar {

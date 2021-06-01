@@ -13,7 +13,7 @@
       <q-tabs
         no-caps
         active-color="white"
-        indicator-color="white"
+        indicator-color="transparent"
         class="text-grey footer-tab"
         v-model="tab"
       >

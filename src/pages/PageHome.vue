@@ -1,11 +1,18 @@
 <template>
   <q-page class="flex">
+    <div class="filtering">
+      <div v-for="(item, index) in filterData" :key="index" :class="filterItemClass(index)" @click="handleFilter(index)">
+        <p>{{item.name}}</p>
+      </div>
+    </div>
+
     <div class="home-header">
       <div>
         <q-avatar>
           <img src="https://cdn.quasar.dev/img/avatar.png" />
         </q-avatar>
         <p>@username</p>
+        <p style="color:#8E8E93">2m</p>
       </div>
       <div @click="openFooterMenu('bottom')">
         <img src="../assets/img/three-dots.png" />
@@ -46,6 +53,7 @@
         @close="closeCreateCard"
         @create="CreateNewCard"
         @formatThemeIndex="formatThemeIndex"
+        @dataSaved="handleShoutStatus"
         :theme="makeTheme(this.themeIndex)"
         :themeIndex="themeIndex"
         :cardsData="cardsData"
@@ -67,6 +75,8 @@
         <q-btn
           label="Shout"
           @click="shoutTheme"
+          no-caps
+          :style="shoutBg"
         />
       </div>
     </div>
@@ -120,6 +130,7 @@ import Card from "../components/card/Card";
 import CardDetails from "../components/card/CardDetails";
 import CardCreate from "../components/card/CardCreate";
 import _ from "lodash";
+import { filterData } from "../assets/data"
 
 export default {
   name: "PageHome",
@@ -131,7 +142,11 @@ export default {
       cardDetailsIndex: 0,
       showCardDialog: false,
       showCardData: this.cardsData.length ? _.cloneDeep(this.cardsData[0]) : {},
-      themeIndex: 0
+      themeIndex: 0,
+      shoutStatus: false,
+      shoutBg: 'background: #8E8E93',
+      filterData: _.cloneDeep(filterData),
+      selectFilter: 0,
     };
   },
   methods: {
@@ -157,6 +172,8 @@ export default {
     },
     closeCreateCard() {
       this.$emit("closeCreateCard");
+      this.shoutBg = 'background: #8E8E93';
+      this.shoutStatus = false;
     },
     selectedTheme(index) {
       if (this.themeIndex === index) {
@@ -185,6 +202,20 @@ export default {
     },
     formatThemeIndex() {
       this.themeIndex = 0
+    },
+    handleShoutStatus() {
+      this.shoutStatus = true
+      this.shoutBg = 'background: #0A84FF'
+    },
+    handleFilter(index) {
+      this.selectFilter = index
+    },
+    filterItemClass(index) {
+      if (index === this.selectFilter) {
+        return 'selected'
+      } else {
+        return ''
+      }
     }
   },
   components: {
@@ -230,6 +261,40 @@ export default {
     }
   }
 }
+.filtering {
+  display: inline-flex;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  height: 55px;
+  width: 100%;
+  & > div {
+    height: 32px;
+    margin-top: 5px;
+    width: 98px;
+    border-radius: 7px;
+    background: #2C2C2E;
+    margin-right: 8px;
+    flex: 0 0 98px;
+    p {
+      margin: 0;
+      padding: 0;
+      font-family: "soleil";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 24px;
+      text-align: center;
+      color: white;
+      padding: 4px;
+    }
+  }
+  .selected {
+    background: white;
+    p {
+      color: #0C0C0C;
+    }
+  }
+}
 .home-header {
   display: flex;
   align-content: center;
@@ -267,6 +332,12 @@ export default {
   p {
     margin: 5px 0;
     padding: 0;
+    color: rgba(255, 255, 255, 0.65);
+    font-family: "soleil";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
   }
   & > div {
     display: flex;
@@ -292,6 +363,11 @@ export default {
     padding: 0 10px;
     border-radius: 100px;
     width: 100px;
+    color: white;
+    font-family: "soleil";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
   }
 }
 .bottom-menu {
@@ -300,6 +376,7 @@ export default {
   align-items: flex-start;
   padding: 0px;
   background: rgba(30, 30, 30, 0.75);
+  -webkit-backdrop-filter: blur(81.5485px);
   backdrop-filter: blur(81.5485px);
   border-radius: 14px 14px 0 0 !important;
   height: fit-content;

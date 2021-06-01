@@ -2,8 +2,8 @@
 
 .custom-scroll-bar {
   &::-webkit-scrollbar {
-    width: 1px;
-    height: 3px;
+    width: 0;
+    height: 0;
     cursor: pointer;
   }
   &::-webkit-scrollbar-track {
@@ -13,6 +13,6 @@
     background: transparent;
   }
   &::-webkit-scrollbar-thumb:hover {
-    background: #666;
+    background: transparent;
   }
 }

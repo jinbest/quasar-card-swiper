@@ -19,12 +19,12 @@
         </div>
       </div>
       <div>
-        <div style="margin-right: 10px;" @click="SaveInputValue">
+        <div class="done-btn" @click="SaveInputValue">
           Done
         </div>
-        <div @click="$emit('close')">
+        <!-- <div @click="$emit('close')">
           <img src="../../assets/img/close.png" />
-        </div>
+        </div> -->
       </div>
     </q-card-section>
 
@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     SaveInputValue() {
-      if (!this.details.length) {
+      if (!this.details.length && !this.text) {
         return;
       }
       if (this.text) {
@@ -103,6 +103,8 @@ export default {
     #df47fd 44.87%,
     #ffb72b 100%
   );
+  border-radius: 23px !important;
+  -webkit-backdrop-filter: blur(32px);
   backdrop-filter: blur(32px);
   max-height: 100vh !important;
   top: 0;
@@ -113,6 +115,16 @@ export default {
     outline: none;
     overflow-y: scroll !important;
     overflow-x: hidden !important;
+  }
+  .done-btn {
+    font-family: "soleil";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: right;
+    color: #FFFFFF;
+    margin-right: 5px;
   }
   .text {
     font-size: 18px;
@@ -130,6 +142,15 @@ export default {
       background: transparent;
       color: white;
       text-align: center;
+      font-family: "soleil";
+      font-style: normal;
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 26px;
+      &::-webkit-input-placeholder {
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 23px;
+      }
     }
   }
 }
@@ -167,6 +188,7 @@ export default {
     background: rgba(255, 255, 255, 0.23);
     border: 1px solid rgba(255, 255, 255, 0.13);
     box-sizing: border-box;
+    -webkit-backdrop-filter: blur(7px);
     backdrop-filter: blur(7px);
     border-radius: 100px;
     margin-right: 10px;
@@ -209,6 +231,7 @@ export default {
     background: rgba(255, 255, 255, 0.23);
     border: 1px solid rgba(255, 255, 255, 0.13);
     box-sizing: border-box;
+    -webkit-backdrop-filter: blur(7px);
     backdrop-filter: blur(7px);
     border-radius: 100px;
     width: 40px;
@@ -227,6 +250,7 @@ export default {
     border: 0.5px solid rgba(0, 0, 0, 0.17);
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.13);
     box-sizing: border-box;
+    -webkit-backdrop-filter: blur(7px);
     backdrop-filter: blur(7px);
     border-radius: 100px;
     width: 40px;

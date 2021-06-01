@@ -4,19 +4,22 @@
       <div></div>
       <div>
         <div @click="$emit('close')">
-          <img src="../../assets/img/close.png" />
+          <!-- <img src="../../assets/img/close.png" /> -->
+          <div class="close-icon">
+            <img src="../../assets/svg/icon-close.svg" />
+          </div>
         </div>
       </div>
     </q-card-section>
     <q-btn
       rounded
       color="white"
-      text-color="black"
+      text-color="#636366"
       no-caps
       class="round-select-card-type-btn"
       @click="openSelectTypeModal"
     >
-      {{ title || "What do you want to shout about?" }}
+      <span :style="cardHeadTitle(this.title)">{{ title || "What do you want to shout about?" }}</span>
     </q-btn>
 
     <q-card-section class="tap-typing">
@@ -112,6 +115,14 @@ export default {
     handleInputValue(data) {
       this.details = _.cloneDeep(data);
       this.tapBtn = false;
+      this.$emit("dataSaved")
+    },
+    cardHeadTitle(txt) {
+      if(txt) {
+        return "color: #0C0C0C;"
+      } else {
+        return "color: #636366;"
+      }
     }
   },
   components: {
@@ -148,7 +159,12 @@ export default {
     align-items: center;
     justify-content: center;
     p {
-      color: white;
+      color: rgba(255, 255, 255, 0.65);
+      font-family: "soleil";
+      font-style: normal;
+      font-weight: bold;
+      font-size: 24px;
+      line-height: 26px;
     }
   }
 }
@@ -174,10 +190,22 @@ export default {
       padding: 0;
     }
   }
+  .close-icon {
+    width: 28px;
+    height: 28px;
+    background: rgba(48, 52, 64, 0.65);
+    -webkit-backdrop-filter: blur(7px);
+    backdrop-filter: blur(7px);
+    border-radius: 56px;
+    text-align: center;
+    img {
+      margin-top: 9px;
+    }
+  }
 }
 .round-select-card-type-btn {
-  max-width: calc(100% - 50px);
-  margin: auto;
+  max-width: calc(100% - 100px);
+  margin: -20px auto 0;
 }
 .card-input-details {
   & > div {

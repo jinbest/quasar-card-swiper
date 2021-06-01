@@ -9,6 +9,9 @@
     <q-card-section class="text custom-scroll-bar">
       {{ data.text }}
     </q-card-section>
+    <q-card-section class="read-more">
+      <div>Read more</div>
+    </q-card-section>
     <q-card-section class="card-footer">
       <div>
         <div class="item">
@@ -39,13 +42,14 @@ export default {
 
 <style lang="scss">
 .q-card {
-  max-width: 400px;
+  max-width: 343px;
+  max-height: 566px;
   width: 100%;
   cursor: pointer;
   border-radius: 23px;
   position: relative;
   margin: 15px auto 0;
-  height: calc(100vh - 150px);
+  height: calc(100vh - 190px);
   min-height: 300px;
   display: flex;
   flex-direction: column;
@@ -55,7 +59,7 @@ export default {
     text-align: center;
     font-family: "soleil";
     font-weight: 400;
-    max-height: calc(100% - 140px);
+    max-height: calc(100% - 165px);
     overflow-y: scroll;
     overflow-x: hidden;
     margin-bottom: 20px;
@@ -83,6 +87,30 @@ export default {
     line-height: 20px;
     font-weight: normal;
     font-family: "soleil";
+    text-align: center;
+    margin: auto;
+  }
+}
+.read-more {
+  position: absolute;
+  bottom: 65px;
+  left: calc(50% - 44px);
+  padding: 0;
+  & > div {
+    width: 87px;
+    height: 26px;
+    background: rgba(255, 255, 255, 0.45);
+    border: 0.5px solid rgba(0, 0, 0, 0.17);
+    box-sizing: border-box;
+    -webkit-backdrop-filter: blur(32px);
+    backdrop-filter: blur(32px);
+    border-radius: 7px;
+    color: #1C1C1E;
+    font-family: "soleil";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 21px;
     text-align: center;
     margin: auto;
   }

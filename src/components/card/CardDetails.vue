@@ -8,13 +8,16 @@
               <img src="https://cdn.quasar.dev/img/avatar.png" />
             </q-avatar>
             <p>@username</p>
+            <p style="color:rgba(255, 255, 255, 0.45);">2m</p>
           </div>
           <div>
-            <!-- <div @click="openFooterMenu('bottom')" style="margin-right: 10px">
-            <img src="../../assets/img/three-dots.png" />
-          </div> -->
+            <div style="margin-right: 15px">
+              <img src="../../assets/img/three-dots.png" />
+            </div>
             <div @click="$emit('close')">
-              <img src="../../assets/img/close.png" />
+              <div class="close-icon">
+                <img src="../../assets/svg/icon-close.svg" />
+              </div>
             </div>
           </div>
         </q-card-section>
@@ -66,142 +69,151 @@
           </p>
         </div>
         <div class="comment-list">
-          <div
-            class="each-comment"
-            v-for="(item, index) in mainData.discussion"
-            :key="index"
-          >
-            <q-avatar>
-              <img :src="item.avatar" />
-            </q-avatar>
-            <div class="each-data">
-              <p class="p-username">{{ item.username }}</p>
-              <div class="discussion" style="align-items: inherit;">
-                <p class="p-comment">{{ item.comment }}</p>
-                <div
-                  class="outline-heart"
-                  :style="reacted(item.react)"
-                  @click="toggleReact(index)"
-                >
-                  <img :src="reactImgSrc(item.react)" />
-                </div>
-              </div>
-              <div class="p-reply">
-                <p>{{ item.date }}</p>
-                <p v-if="item.likes">{{ `${item.likes} Likes` }}</p>
-                <p style="color: white" @click="handleReply(index)">Reply</p>
-              </div>
-              <div
-                v-for="(itreply, idxreply) in item.reply"
-                class="each-comment"
-                :key="idxreply"
-              >
-                <q-avatar style="width:24px; height: 24px;">
-                  <img :src="itreply.avatar" />
-                </q-avatar>
-                <div class="each-data">
-                  <p class="p-username">{{ itreply.username }}</p>
-                  <div class="discussion" style="align-items: inherit;">
-                    <p class="p-comment" :style="setBackground(itreply.reply)">
-                      {{ itreply.comment }}
-                    </p>
-                    <div
-                      class="outline-heart"
-                      :style="reacted(itreply.react)"
-                      @click="toggleReact(index, idxreply)"
-                    >
-                      <img :src="reactImgSrc(itreply.react)" />
-                    </div>
-                  </div>
-                  <div class="p-reply">
-                    <p>{{ itreply.date }}</p>
-                    <p v-if="itreply.likes">{{ `${itreply.likes} Likes` }}</p>
-                    <p
-                      style="color: white"
-                      @click="handleReply(index, idxreply)"
-                    >
-                      Reply
-                    </p>
-                  </div>
+          <div v-for="(item, index) in mainData.discussion" :key="index">
+            <div class="each-comment">
+              <q-avatar>
+                <img :src="item.avatar" />
+              </q-avatar>
+              <div class="each-data">
+                <p class="p-username">{{ item.username }}</p>
+                <div class="discussion" style="align-items: inherit;">
+                  <p class="p-comment">{{ item.comment }}</p>
                   <div
-                    v-for="(itrereply, idxrereply) in itreply.reply"
-                    :key="idxrereply"
-                    class="each-comment"
+                    class="outline-heart"
+                    :style="reacted(item.react)"
+                    @click="toggleReact(index)"
                   >
-                    <q-avatar style="width:24px; height: 24px;">
-                      <img :src="itrereply.avatar" />
-                    </q-avatar>
-                    <div class="each-data">
-                      <p class="p-username">{{ itrereply.username }}</p>
-                      <div class="discussion" style="align-items: inherit;">
-                        <p
-                          class="p-comment"
-                          :style="setBackground(itrereply.reply)"
-                        >
-                          {{ itrereply.comment }}
-                        </p>
-                        <div
-                          class="outline-heart"
-                          :style="reacted(itrereply.react)"
-                          @click="toggleReact(index, idxreply, idxrereply)"
-                        >
-                          <img :src="reactImgSrc(itrereply.react)" />
-                        </div>
-                      </div>
-                      <div class="p-reply">
-                        <p>{{ itrereply.date }}</p>
-                        <p v-if="itrereply.likes">
-                          {{ `${itrereply.likes} Likes` }}
-                        </p>
-                        <p
-                          style="color: white"
-                          @click="handleReply(index, idxreply, idxrereply)"
-                        >
-                          Reply
-                        </p>
-                      </div>
-                      <div
-                        v-for="(itrerereply, idxrerereply) in itrereply.reply"
-                        :key="idxrerereply"
-                        class="each-comment"
+                    <img :src="reactImgSrc(item.react)" />
+                  </div>
+                </div>
+                <div class="p-reply">
+                  <p>{{ item.date }}</p>
+                  <p v-if="item.likes">{{ `${item.likes} Likes` }}</p>
+                  <p style="color: white" @click="handleReply(index)">Reply</p>
+                </div>
+                <div
+                  v-for="(itreply, idxreply) in item.reply"
+                  class="each-comment"
+                  :key="idxreply"
+                >
+                  <q-avatar style="width:24px; height: 24px;">
+                    <img :src="itreply.avatar" />
+                  </q-avatar>
+                  <div class="each-data">
+                    <p class="p-username">{{ itreply.username }}</p>
+                    <div class="discussion" style="align-items: inherit;">
+                      <p
+                        class="p-comment"
+                        :style="setBackground(itreply.reply)"
                       >
-                        <q-avatar style="width:24px; height: 24px;">
-                          <img :src="itrerereply.avatar" />
-                        </q-avatar>
-                        <div class="each-data">
-                          <p class="p-username">{{ itrerereply.username }}</p>
-                          <div class="discussion" style="align-items: inherit;">
-                            <p class="p-comment" style="background: #0A84FF;">
-                              {{ itrerereply.comment }}
-                            </p>
+                        {{ itreply.comment }}
+                      </p>
+                      <div
+                        class="outline-heart"
+                        :style="reacted(itreply.react)"
+                        @click="toggleReact(index, idxreply)"
+                      >
+                        <img :src="reactImgSrc(itreply.react)" />
+                      </div>
+                    </div>
+                    <div class="p-reply">
+                      <p>{{ itreply.date }}</p>
+                      <p v-if="itreply.likes">{{ `${itreply.likes} Likes` }}</p>
+                      <p
+                        style="color: white"
+                        @click="handleReply(index, idxreply)"
+                      >
+                        Reply
+                      </p>
+                    </div>
+                    <div
+                      v-for="(itrereply, idxrereply) in itreply.reply"
+                      :key="idxrereply"
+                      class="each-comment"
+                    >
+                      <q-avatar style="width:24px; height: 24px;">
+                        <img :src="itrereply.avatar" />
+                      </q-avatar>
+                      <div class="each-data">
+                        <p class="p-username">{{ itrereply.username }}</p>
+                        <div class="discussion" style="align-items: inherit;">
+                          <p
+                            class="p-comment"
+                            :style="setBackground(itrereply.reply)"
+                          >
+                            {{ itrereply.comment }}
+                          </p>
+                          <div
+                            class="outline-heart"
+                            :style="reacted(itrereply.react)"
+                            @click="toggleReact(index, idxreply, idxrereply)"
+                          >
+                            <img :src="reactImgSrc(itrereply.react)" />
+                          </div>
+                        </div>
+                        <div class="p-reply">
+                          <p>{{ itrereply.date }}</p>
+                          <p v-if="itrereply.likes">
+                            {{ `${itrereply.likes} Likes` }}
+                          </p>
+                          <p
+                            style="color: white"
+                            @click="handleReply(index, idxreply, idxrereply)"
+                          >
+                            Reply
+                          </p>
+                        </div>
+                        <div
+                          v-for="(itrerereply, idxrerereply) in itrereply.reply"
+                          :key="idxrerereply"
+                          class="each-comment"
+                        >
+                          <q-avatar style="width:24px; height: 24px;">
+                            <img :src="itrerereply.avatar" />
+                          </q-avatar>
+                          <div class="each-data">
+                            <p class="p-username">{{ itrerereply.username }}</p>
                             <div
-                              class="outline-heart"
-                              :style="reacted(itrerereply.react)"
-                              @click="
-                                toggleReact(
-                                  index,
-                                  idxreply,
-                                  idxrereply,
-                                  idxrerereply
-                                )
-                              "
+                              class="discussion"
+                              style="align-items: inherit;"
                             >
-                              <img :src="reactImgSrc(itrerereply.react)" />
+                              <p class="p-comment" style="background: #0A84FF;">
+                                {{ itrerereply.comment }}
+                              </p>
+                              <div
+                                class="outline-heart"
+                                :style="reacted(itrerereply.react)"
+                                @click="
+                                  toggleReact(
+                                    index,
+                                    idxreply,
+                                    idxrereply,
+                                    idxrerereply
+                                  )
+                                "
+                              >
+                                <img :src="reactImgSrc(itrerereply.react)" />
+                              </div>
+                            </div>
+                            <div class="p-reply">
+                              <p>{{ itrerereply.date }}</p>
+                              <p v-if="itrerereply.likes">
+                                {{ `${itrerereply.likes} Likes` }}
+                              </p>
                             </div>
                           </div>
-                          <div class="p-reply">
-                            <p>{{ itrerereply.date }}</p>
-                            <p v-if="itrerereply.likes">
-                              {{ `${itrerereply.likes} Likes` }}
-                            </p>
-                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                <div v-if="index === 0" class="replies-liner">
+                  <div />
+                  <span>View 4 Replies</span>
+                  <div />
+                </div>
               </div>
-            </div>
+            </div>            
           </div>
         </div>
       </div>
@@ -392,9 +404,10 @@ export default {
 .details-container {
   max-width: 580px !important;
   position: fixed;
-  width: calc(100% - 20px);
+  width: 100%;
   height: 100%;
   background: #1c1c1e;
+  -webkit-backdrop-filter: blur(32px);
   backdrop-filter: blur(32px);
   max-height: calc(100vh - 20px) !important;
   border-radius: 23px !important;
@@ -423,10 +436,11 @@ export default {
           flex-direction: row;
           justify-content: center;
           align-items: center;
+          font-size: 14px;
           .q-avatar {
-            width: 20px;
-            height: 20px;
-            margin-left: 5px;
+            width: 15px;
+            height: 15px;
+            margin-left: 10px;
           }
         }
       }
@@ -487,6 +501,21 @@ export default {
                 color: rgba(255, 255, 255, 0.45);
               }
             }
+            .replies-liner {
+              width: calc(100% - 50px);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              & > div {
+                height: 1px;
+                background: #8E8E93;
+                width: calc(50% - 65px);
+              }
+              span {
+                color: #8E8E93;
+                text-align: center;
+              }
+            }
           }
         }
       }
@@ -503,6 +532,8 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 15px;
+    -webkit-backdrop-filter: blur(32px);
+    backdrop-filter: blur(32px);
     .upload {
       display: flex;
       align-items: center;
@@ -594,6 +625,18 @@ export default {
       padding: 0;
     }
   }
+  .close-icon {
+    width: 28px;
+    height: 28px;
+    background: rgba(48, 52, 64, 0.65);
+    -webkit-backdrop-filter: blur(7px);
+    backdrop-filter: blur(7px);
+    border-radius: 56px;
+    text-align: center;
+    img {
+      margin-top: 9px;
+    }
+  }
 }
 .card-details-header {
   display: flex;
@@ -649,11 +692,12 @@ export default {
     p {
       margin: auto 5px;
       padding: 0;
+      color: white;
     }
   }
 }
 .q-dialog__inner--minimized {
-  padding: 10px;
+  padding: 10px 0px;
   align-items: flex-start;
 }
 .reply-dialog {
