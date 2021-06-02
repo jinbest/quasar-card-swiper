@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex">
-    <div class="filtering">
+    <div class="filtering custom-scroll-bar">
       <div v-for="(item, index) in filterData" :key="index" :class="filterItemClass(index)" @click="handleFilter(index)">
         <p>{{item.name}}</p>
       </div>
