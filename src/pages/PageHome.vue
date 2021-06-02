@@ -319,7 +319,7 @@ export default {
   display: none;
 }
 .select-card-theme {
-  height: 80px !important;
+  height: 90px !important;
   position: fixed;
   max-width: 600px;
   margin-left: -20px;

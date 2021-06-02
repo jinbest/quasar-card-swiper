@@ -8,6 +8,7 @@ const routes = [
       { path: '/search', component: () => import('pages/PageSearch.vue') },
       { path: '/notification', component: () => import('pages/PageNotification.vue') },
       { path: '/user', component: () => import('pages/PageUser.vue') },
+      { path: '/interest', component: () => import('pages/PageInterest.vue') },
     ]
   },
 

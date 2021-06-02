@@ -139,7 +139,7 @@ export default {
   width: 100%;
   border-radius: 23px !important;
   position: relative !important;
-  height: calc(100% - 75px) !important;
+  height: calc(100% - 90px) !important;
   margin: 0 auto !important;
   min-height: 300px !important;
   display: flex !important;

@@ -1,20 +1,22 @@
 <template>
   <q-page class="flex">
     <div class="search-header">
-      <div>
+      <div :style="inputStyle(this.text)">
         <q-icon name="search" />
         <input
           v-model="text"
-          placeholder="Search for an interest ..."
-          @input="handleSearch($event)"
+          placeholder="Search shoutup..."
+          @input="handleSearch($event)"          
         />
       </div>
-      <!-- <q-btn label="Cancel" @click="handleCancel" /> -->
-      <p class="cancel-btn" @click="handleCancel">Cancel</p>
+      <p v-if="text" class="cancel-btn" @click="handleCancel">Cancel</p>
     </div>
 
     <div class="container custom-scroll-bar">
-      <p v-if="recentFilterData.length">Recent Searches:</p>
+      <div v-if="recentFilterData.length" style="display: flex; justify-content: space-between; align-items: center">
+        <p>Recent Searches:</p>
+        <p style="color:#0A84FF" @click="clearRecentSearch">Clear</p>
+      </div>
       <div v-if="recentFilterData.length" class="data-panel">
         <div
           v-for="(item, index) in recentFilterData.slice(0, 3)"
@@ -25,7 +27,10 @@
           <q-avatar>
             <img :src="item.control.avatar" />
           </q-avatar>
-          <p class="header-title">{{ item.control.title.discover }}</p>
+          <div>
+            <p class="header-title">{{ item.control.title.discover }}</p>
+            <p class="type">{{ item.control.type }}</p>
+          </div>
         </div>
       </div>
 
@@ -39,7 +44,10 @@
           <q-avatar>
             <img :src="item.control.avatar" />
           </q-avatar>
-          <p class="header-title">{{ item.control.title.discover }}</p>
+          <div>
+            <p class="header-title">{{ item.control.title.discover }}</p>
+            <p class="type">{{ item.control.type }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -105,6 +113,10 @@ export default {
       );
       this.filteredData = filterData;
     },
+    clearRecentSearch() {
+      this.recentFilterData = []
+      this.$store.dispatch("main/setRecentSearchData", []);
+    },
     handleCancel() {
       this.text = "";
       this.filteredData = this.cardsData;
@@ -114,6 +126,13 @@ export default {
         return "border-top: none";
       } else {
         return "";
+      }
+    },
+    inputStyle(text) {
+      if(text) {
+        return 'background:white;color:#1C1C1E;width:100%'
+      } else {
+        return 'width:100%'
       }
     }
   },
@@ -138,20 +157,20 @@ export default {
     align-content: center;
     justify-content: space-between;
     width: 100%;
-    height: 40px;
+    height: 36px;
     align-items: center;
     input {
       border: none;
       background: transparent;
       outline: none;
-      color: white;
+      // color: white;
     }
     & > div {
       display: flex;
       align-content: center;
       box-sizing: border-box;
-      margin: auto 10px auto 0;
-      padding: 5px 10px;
+      margin: auto 0;
+      padding: 0px 10px;
       border-radius: 100px;
       border: 1px solid rgb(100, 100, 100);
       width: calc(100% - 80px);
@@ -173,7 +192,7 @@ export default {
       text-align: right;
       color: #FFFFFF;
       padding: 0;
-      margin: 0;
+      margin: 0 0 0 10px;
     }
   }
   .data-panel {
@@ -202,6 +221,12 @@ export default {
       text-align: left;
       margin: auto 0 auto 15px;
       padding: 0;
+    }
+    .type {
+      color: #8E8E93;
+      font-size: 14px;
+      padding: 0;
+      margin: 10px 0 0 15px;
     }
   }
   .q-dialog {

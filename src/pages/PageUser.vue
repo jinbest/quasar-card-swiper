@@ -9,7 +9,7 @@
         <div
           class="img-container"
           style="margin-left: 0"
-          v-if="!viewMain && inviteEmail"
+          v-if="(!viewMain && inviteEmail) || (viewProfile && following)"
           @click="backInvite"
         >
           <img src="../assets/img/back.png" />
@@ -46,6 +46,12 @@
           <img :src="userData.avatar" />
         </q-avatar>
         <p class="username">{{ userData.username }}</p>
+        <div v-if="following" class="follow-container">
+          <button class="button">Follow</button>
+          <div class="img-container">
+            <img src="../assets/img/alarm.png" />
+          </div>
+        </div>
         <div class="profile-data">
           <div v-for="(item, index) in userData.data" :key="index">
             <p class="total">{{ item.total }}</p>
@@ -65,6 +71,7 @@
         narrow-indicator
         v-touch:swipe.top="swipeTopHandler"
         v-touch:swipe.bottom="swipeBottomHandler"
+        style="margin-bottom: 10px"
       >
         <q-tab name="shouts" label="Shouts" no-caps />
         <q-tab name="interests" label="Interests" no-caps />
@@ -134,7 +141,7 @@
             <div
               v-for="(item, index) in cardsData"
               v-if="item.control.commonInterest"
-              @click="openCardDetails(index)"
+              @click="$router.push('interest')"
               :style="borderStyle(index)"
             >
               <q-avatar>
@@ -150,7 +157,7 @@
           <div class="interests-card">
             <div
               v-for="(item, index) in cardsData"
-              @click="openCardDetails(index)"
+              @click="$router.push('interest')"
               :style="borderStyle(index)"
             >
               <q-avatar>
@@ -218,7 +225,8 @@ export default {
       viewSetting: false,
       viewInvite: false,
       inviteEmail: false,
-      inviteSent: false
+      inviteSent: false,
+      following: true
     };
   },
   components: {
@@ -285,8 +293,13 @@ export default {
       this.inviteEmail = false;
     },
     backInvite() {
-      this.inviteEmail = false;
-      this.inviteSent = false;
+      if (this.following) {
+        this.following = false
+      } else {
+        this.inviteEmail = false;
+        this.inviteSent = false;
+        this.following = true;
+      }
     },
     borderStyle(index) {
       if (index === 0) {
@@ -301,7 +314,7 @@ export default {
 <style lang="scss">
 .q-page {
   width: 100%;
-  padding: 20px;
+  padding: 15px;
   display: block;
   height: calc(100vh - 60px);
   overflow: hidden;
@@ -334,8 +347,9 @@ export default {
         margin: auto 5px;
         padding: 0;
       }
-    }
-    .img-container {
+    }    
+  }
+  .img-container {
       border-radius: 100px;
       border: 1px solid #3a3a3c;
       width: 32px;
@@ -359,7 +373,6 @@ export default {
         cursor: inherit;
       }
     }
-  }
   .profile {
     display: flex;
     flex-direction: column;
@@ -374,6 +387,27 @@ export default {
       font-size: 16px;
       font-family: "soleil";
       margin: 0;
+    }
+    .follow-container {
+      display: flex;
+      justify-content: space-between; 
+      align-items:center;
+      width: 100%;
+      margin: 10px 0;
+      .button {
+        background: #0A84FF !important;
+        border-radius: 7px;
+        align-items: center;
+        width: calc(100% - 50px);
+        font-family: "soleil";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        height: 36px;
+        outline: none;
+        color: white;
+        border: none;
+      }
     }
     .profile-data {
       display: flex;
